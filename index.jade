@@ -12,6 +12,9 @@ body
     .row
       .span2
         ul#examples.nav.nav-list
+          for example in examples
+            li
+              a(href='/lett/examples/' +example) #{example}
       .span4
         textarea.span4(rows=15)
       .span1

@@ -1,21 +1,16 @@
 $(function() {
-    $.get('gist', function(data) {
-        var $examples = $('#examples')
-        $(data).find('a').slice(1).each(function() {
-            var $a = $(this);
-            $examples.append($('<li>').append($a));
-            $a.click(function() {
-                $examples.children('li').removeClass('active');
-                $a.parent().addClass('active');
-                $.get('gist/' + $a.attr('href'), function(data) {
-                    $('textarea').val(data);
-                    $('button').click();
-                });
-                return false;
-            });
+    $examples = $('#examples')
+    $examples.find('a').click(function() {
+        var $a = $(this);
+        $examples.children('li').removeClass('active');
+        $a.parent().addClass('active');
+        $.get($a.attr('href'), function(data) {
+            $('textarea').val(data);
+            $('button').click();
         });
-        $('a:eq(0)').click();
+        return false;
     });
+    $examples.find('a:eq(0)').click();
 
     $('button').click(function() {
         var code = $('textarea').val(),

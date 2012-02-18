@@ -1,0 +1,11 @@
+{
+    "name": "build.js",
+    "author": "Eirik Brandtzæg <eirikb@eirikb.no>",
+    "main": "build.js",
+    "version": "0.0.1",
+    "description": "Building like a boss",
+    "dependencies": {
+        "jade": ""
+    }
+}
+
