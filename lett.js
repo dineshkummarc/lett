@@ -68,120 +68,20 @@ var lett = (function() {
         return current;
     }
 
-    function call(b, obj) {
-        var f, name = b.part,
-        args = b.args.map(function(c) {
-            var o = obj;
-            c.part && c.part.split('.').forEach(function(n) {
-                if (o[n]) o = o[n];
-            });
-            if (o !== obj) return o();
-            //return lettval(c, obj);
-        });
-        f = this;
-        name.split('.').forEach(function(name) {
-            f = f && f[name];
-        });
-        if (!f) f = corelib[name];
-
-        if (!f && name.match(/^\./)) {
-            f = fn[name.slice(1)];
-            return function() {
-                return fn = f && f.apply(fn, args);
-            }
-        } else {
-            return function() {
-                return fn = f && f.apply(null, args);
-            }
-        }
-    }
-
-    function defn(b, obj) {
-        var i, calls, vars = [];
-        b.children.some(function(c, j) {
-            var k = typeof c.type === 'undefined';
-            if (k) vars.push(c.part);
-            i = j;
-            return k;
-        });
-        calls = b.children.slice(i).filter(function(f) {
-            return f.type === 'call';
-        });
-        return function() {
-            var a = arguments,
-            o = {};
-            vars.forEach(function(v, i) {
-                o[v] = a[i];
-            });
-            calls.slice(0, calls.length - 1).forEach(function(c) {
-                call(c, o)();
-            });
-            return call(calls[calls.length - 1], o)();
-        };
-    }
-
-    function lettval(b, obj) {
-        var name, o, p, t, i = 0,
-        fns;
-        if (b.type === 'call') {
-            return call(b, obj)();
-        } else if (b.type === 'fn') {
-            return defn(b, obj);
-        } else if (b.type === 'str') {
-            return '' + b.part;
-        } else if (b.type === 'obj') {
-            p = o = {};
-            b.children.forEach(function(c) {
-                if (c.type === 'call') {
-                    fns = lettval(c, o);
-                } else {
-                    fns = false;
-                    if (i % 2 === 0) {
-                        name = c.part;
-                    } else {
-                        name = name.split('.');
-                        name.slice(0, name.length - 1).forEach(function(name) {
-                            o = o[name] = {};
-                        });
-                        o[name.pop()] = lettval(c, o);
-                    }
-                    i++;
-                }
-            });
-            if (fns) return fns;
-            return p;
-        }
-
-        t = obj;
-        b.part.split('.').forEach(function(name) {
-            if (t[name]) t = t[name];
-        });
-
-        return b.part;
-    }
-
     function removeComments() {
         code = code.replace(/\/\/.*\n/g, '');
     }
 
+    // Currently only building parse tree
     function build(c) {
-        var tree, obj = {}
         code = c;
         removeComments();
-        tree = {
-            type: 'obj',
-            children: buildTree()
-        };
-        return lettval(tree, obj);
+        return buildTree();
     }
 
     return {
         build: build,
-        buildTree: function(c) {
-            code = c;
-            removeComments();
-            return buildTree();
-        }
+        buildTree: build
     };
 })();
 
