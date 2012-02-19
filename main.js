@@ -11,7 +11,7 @@ $(function() {
             $.each(data.split(/\n/), function(i, d) {
                 $code.append($('<li>').append($('<span>').addClass('pln').text(d)));
             });
-            $('button').click();
+            $('#parse').click();
         });
         location.hash = $a.text();
         return false;
@@ -25,42 +25,45 @@ $(function() {
         $examples.find('a:eq(0)').click();
     }
 
-    $('button').click(function() {
-        var code = $.makeArray($code.find('span').map(function() {
-            return $(this).text()
+    $('#parse').click(function() {
+        var b, code = $.makeArray($code.find('span').map(function() {
+            return $(this).text();
         })).join('\n');
-        b = lett.buildTree(code);
-        console.log(b);
 
-        $('#tree').empty();
-        b.forEach(function(a) {
-            $('#tree').append(print(a));
-        });
+        b = lett.build(code);
+
+        $('#tree').empty().append(print(b));
     });
 
     function print(a) {
-        var $li, $ul2, t = '',
-        $ul = $('<ul>'),
-        addProp = function(name) {
-            if (a[name]) {
-                $li = $('<li>').text('(' + name + ')');
-                $ul2 = $('<ul>');
-                $.each(a[name], function(i, val) {
-                    $ul2.append(print(val));
-                });
-                $ul.append($li.append($ul2));
-            }
-        };
+        var $ul, t = a.type ? ' (' + a.type + ')': '',
+        $li = $('<li>').text((a.val || '') + t);
 
-        if (a.part) {
-            if (a.type) t = ' (' + a.type + ') ';
-            $li = $('<li>').text(t + a.part);
-            $ul.append($li);
+        if (a.vars) {
+            $li.append($('<span>').text(' vars:'));
+            $ul = $('<ul>');
+            $.each(a.vars, function(i, a) {
+                $ul.append($('<li>').append(a.val));
+            });
+            $li.append($ul);
         }
-        addProp('args');
-        addProp('children');
-        addProp('chain');
-        return $ul;
+        if (a.children) {
+            $ul = $('<ul>');
+            $.each(a.children, function(i, a) {
+                if (a.length === 2) {
+                    $ul.append($('<li>').append($('<span>').text(a[0] + ' = ')).append(print(a[1])));
+                } else {
+                    $ul.append($('<li>').append(print(a)));
+                }
+            });
+            $li.append($ul);
+        }
+        if (a.chain) {
+            $ul = $('<ul>').append(print(a.chain));
+            $li.append($ul);
+        }
+
+        return $li;
     }
 });
 
