@@ -3,6 +3,7 @@ head
   title eirikb.no
   meta(charset='utf-8')
   link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css')
+  link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css')
   script(src='http://code.jquery.com/jquery.min.js')
   script(src='corelib.js')
   script(src='lett.js')
@@ -10,13 +11,19 @@ head
 body
   .container(style='margin-top: 10px')
     .row
+      ul.nav.nav-tabs
+        li.active
+          a Prase tree
+        li
+          a.disabled Run code (to be implemented)
       .span2
         ul#examples.nav.nav-list
           for example in examples
             li
               a(href='/lett/examples/' +example) #{example}
       .span4
-        textarea.span4(rows=15)
+        pre.prettyprint.linenums
+          ol.linenums(contenteditable=true)
       .span1
         button.btn.btn-primary PARSE
           i.icon-arrow-right.icon-white

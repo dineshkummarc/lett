@@ -1,11 +1,16 @@
 $(function() {
-    $examples = $('#examples')
+    $examples = $('#examples'),
+    $code = $('ol');
+
     $examples.find('a').click(function() {
         var $a = $(this);
         $examples.children('li').removeClass('active');
         $a.parent().addClass('active');
         $.get($a.attr('href'), function(data) {
-            $('textarea').val(data);
+            $code.text('');
+            $.each(data.split(/\n/), function(i, d) {
+                $code.append($('<li>').append($('<span>').addClass('pln').text(d)));
+            });
             $('button').click();
         });
         return false;
@@ -13,7 +18,7 @@ $(function() {
     $examples.find('a:eq(0)').click();
 
     $('button').click(function() {
-        var code = $('textarea').val(),
+        var code = $code.text(),
         b = lett.buildTree(code);
         console.log(b)
 
@@ -25,58 +30,27 @@ $(function() {
 
     function print(a) {   
         var $li, $ul2, t = '',
-        $ul = $('<ul>');
+        $ul = $('<ul>'),
+        addProp = function(name) {
+            if (a[name]) {
+                $li = $('<li>').text('(' + name + ')');
+                $ul2 = $('<ul>');
+                $.each(a[name], function(i, val) {
+                    $ul2.append(print(val));
+                });
+                $ul.append($li.append($ul2));
+            }
+        };
 
         if (a.part) {
             if (a.type) t = ' (' + a.type + ') ';
             $li = $('<li>').text(t + a.part);
             $ul.append($li);
         }
-        if (a.args) {
-            $li = $('<li>').text('(args)');
-            $ul2 = $('<ul>');
-            $.each(a.args, function(i, arg) {
-                $ul2.append(print(arg));
-            });
-            $ul.append($li.append($ul2));
-        }
-        if (a.children) {
-            $li = $('<li>').text('(' + a.type + ')');
-            $ul2 = $('<ul>');
-            $.each(a.children, function(i, child) {
-                $ul2.append(print(child));
-            });
-            $ul.append($li.append($ul2));
-        }
-        if (a.chain) {
-            $li = $('<li>').text('(chain)');
-            $ul2 = $('<ul>').append(print(a.chain));
-            $ul.append($li.append($ul2));
-        }
+        addProp('args');
+        addProp('children');
+        addProp('chain');
         return $ul;
-
-        /*
-        if (a.part) {
-            if (a.type) t = ' (' + a.type + ')';
-            $li = $('<li>').append(a.part + t);
-            if (a.args) {
-                a.args.forEach(function(arg) {
-                    $ul.append(print(arg));
-                });
-                $li.append($ul);
-            }
-            if (a.chain) {
-                $li.append(print(a.chain));
-            }
-            return $li;
-        } else {
-            a.children.forEach(function(c) {
-                $ul.append(print(c));
-            });
-            t = '<li>Wrapper (' + a.type + ')';
-            return $('<ul>').append(t).append($ul);
-        }
-        */
     }
 });
 
