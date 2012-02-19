@@ -14,7 +14,7 @@ var lett = (function() {
             if (l.match(/'|"/)) end = end === l ? false: l;
             if (!end) {
                 if (part.match(/\)$|\}$/)) {
-                    parts.push(part.slice(0, - 1));
+                    parts.push(part.slice(0, - 1).trim());
                     part = part.slice( - 1);
                 }
                 parts.push(part.trim());
@@ -74,13 +74,16 @@ var lett = (function() {
                     branch = branch.slice(0, - 1);
                     if (branch.match(/^\./)) {
                         prev.chain = node;
-                        return;
                     }
                 }
                 if (type) node.type = type;
                 else node.val = branch;
                 if (type === 'call') node.val = branch;
                 else if (type === 'str') node.val = branch.slice(1, - 1);
+                if (prev && prev.chain) {
+                    prev = node;
+                    return;
+                }
                 prev = node;
                 return node;
             }
@@ -93,6 +96,7 @@ var lett = (function() {
     function cleanTree(tree) {
         if (Array.isArray(tree)) return tree.map(cleanTree);
         if (tree.children) tree.children = tree.children.slice(0, - 1).map(cleanTree);
+        if (tree.chain) tree.chain = cleanTree(tree.chain);
         return tree;
     }
 

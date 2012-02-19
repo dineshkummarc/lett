@@ -48,6 +48,7 @@ $(function() {
             $li.append($ul);
         }
         if (a.children) {
+            $li.append($('<span>').text(' body:'));
             $ul = $('<ul>');
             $.each(a.children, function(i, a) {
                 if (a.length === 2) {
