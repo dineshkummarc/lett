@@ -1,5 +1,5 @@
 $(function() {
-    $examples = $('#examples'),
+    var $examples = $('#examples'),
     $code = $('ol');
 
     $examples.find('a').click(function() {
@@ -15,20 +15,21 @@ $(function() {
         });
         return false;
     });
+
     $examples.find('a:eq(0)').click();
 
     $('button').click(function() {
         var code = $code.text(),
         b = lett.buildTree(code);
-        console.log(b)
+        console.log(b);
 
         $('#tree').empty();
         b.forEach(function(a) {
             $('#tree').append(print(a));
-        })
+        });
     });
 
-    function print(a) {   
+    function print(a) {
         var $li, $ul2, t = '',
         $ul = $('<ul>'),
         addProp = function(name) {
