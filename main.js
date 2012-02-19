@@ -26,7 +26,9 @@ $(function() {
     }
 
     $('button').click(function() {
-        var code = $code.text(),
+        var code = $.makeArray($code.find('span').map(function() {
+            return $(this).text()
+        })).join('\n');
         b = lett.buildTree(code);
         console.log(b);
 
