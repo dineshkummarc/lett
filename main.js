@@ -13,10 +13,17 @@ $(function() {
             });
             $('button').click();
         });
+        location.hash = $a.text();
         return false;
     });
 
-    $examples.find('a:eq(0)').click();
+    if (location.hash.length > 0) {
+        $examples.find('a').filter(function() {
+            return $(this).text().indexOf(location.hash.slice(1)) >= 0;
+        }).click();
+    } else {
+        $examples.find('a:eq(0)').click();
+    }
 
     $('button').click(function() {
         var code = $code.text(),
