@@ -41,8 +41,6 @@ var lett = (function() {
 
     function build(code) {
         var tree = parser.parse(code);
-        console.log(tree);
-        console.log(letteval(tree, tree));
         return tree;
     }
 
