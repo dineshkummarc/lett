@@ -9,15 +9,10 @@ head
   script(src='parser.js')
   script(src='lett.js')
   script(src='main.js')
-  style ol { outline: none; }
+  style ol { outline: none; } ol.linenums li {color: black; } .container { margin-top: 20px; }
 body
-  .container-fluid(style='margin-top: 10px')
+  .container
     .row
-      ul.nav.nav-tabs
-        li.active
-          a Prase tree
-        li
-          a.disabled Run code (to be implemented)
       .span2
         ul#examples.nav.nav-list
           for example in examples
@@ -29,5 +24,4 @@ body
       .span1
         button#parse.btn.btn-primary PARSE
           i.icon-arrow-right.icon-white
-      .span5
-        ul#tree.well
+      #result.span4.well

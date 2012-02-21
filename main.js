@@ -1,6 +1,17 @@
+/*
+if (!console) console = {};
+var $result, hack = console.log;
+console.log = function() {
+    hack.apply(console, arguments);
+    $result.text($result.text() + arguments[0]);
+};
+*/
+
 $(function() {
     var $examples = $('#examples'),
     $code = $('ol');
+
+    $result = $('#result');
 
     $examples.find('a').click(function() {
         var $a = $(this);
@@ -9,7 +20,7 @@ $(function() {
         $.get($a.attr('href'), function(data) {
             $code.text('');
             $.each(data.split(/\n/), function(i, d) {
-                $code.append($('<li>').append($('<span>').addClass('pln').text(d)));
+                $code.append($('<li>').text(d));
             });
             $('#parse').click();
         });
@@ -26,45 +37,15 @@ $(function() {
     }
 
     $('#parse').click(function() {
-        var b, code = $.makeArray($code.find('span').map(function() {
+        var b, code = $.makeArray($code.find('li').map(function() {
             return $(this).text();
         })).join('\n');
 
+        $result.text('');
+
         b = lett.build(code);
 
-        $('#tree').empty().append(print(b));
+        $result.text($result.text() + b);
     });
-
-    function print(a) {
-        var $ul, t = a.type ? ' (' + a.type + ')': '',
-        $li = $('<li>').text((a.val || '') + t);
-
-        if (a.vars) {
-            $li.append($('<span>').text(' vars:'));
-            $ul = $('<ul>');
-            $.each(a.vars, function(i, a) {
-                $ul.append($('<li>').append(a.val));
-            });
-            $li.append($ul);
-        }
-        if (a.children) {
-            $li.append($('<span>').text(' body:'));
-            $ul = $('<ul>');
-            $.each(a.children, function(i, a) {
-                if (a.length === 2) {
-                    $ul.append($('<li>').append($('<span>').text(a[0] + ' = ')).append(print(a[1])));
-                } else {
-                    $ul.append($('<li>').append(print(a)));
-                }
-            });
-            $li.append($ul);
-        }
-        if (a.chain) {
-            $ul = $('<ul>').append(print(a.chain));
-            $li.append($ul);
-        }
-
-        return $li;
-    }
 });
 

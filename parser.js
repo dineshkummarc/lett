@@ -19,6 +19,7 @@ var parser = (function() {
                 part = '';
             }
         }
+        parts.push(code.trim());
         return parts;
     }
 
@@ -98,62 +99,9 @@ var parser = (function() {
         return tree;
     }
 
-    // Assign variables by % 2 factor
-    function assignVars(vars) {
-        var name, obj = [],
-        j = 0;
-        vars.forEach(function(v, i) {
-            if (j % 2 === 0) {
-                if (!v.type) {
-                    name = v.val;
-                    j++;
-                } else {
-                    obj.push(v);
-                }
-            } else {
-                obj.push([name, v]);
-                j++;
-            }
-        });
-        return obj;
-    }
-
-    // Use assignVars to build objects
-    function buildObjects(tree) {
-        if (Array.isArray(tree)) return tree.map(buildObjects);
-        if (tree.type === 'obj') {
-            tree.children = tree.children.map(buildObjects);
-            tree.children = assignVars(tree.children);
-        } else if (tree.children) {
-            tree.children = tree.children.map(buildObjects);
-        }
-        return tree;
-    }
-
-    // Structure and build function bodies. Varlist first, then body
-    function functionBodies(tree) {
-        var vars = [],
-        j = 0;
-        if (Array.isArray(tree)) return tree.map(functionBodies);
-        if (tree.type === 'fn') {
-            tree.children.every(function(v, i) {
-                j = i;
-                if (v.type) return false;
-                vars.push(v);
-                return true;
-            });
-            tree.vars = vars;
-            tree.children = tree.children.slice(j);
-            if (tree.children.length === 1 && tree.children[0].type === 'fn') {
-                tree.children = assignVars(tree.children[0].children);
-            }
-        }
-        return tree;
-    }
-
     // This is just temporary, and very ugly!
     function removeComments(code) {
-        return code.replace(/^\/\/.*\n/g, '');
+        return code.replace(/\/\/.*\n/g, '');
     }
 
     function parse(code) {
@@ -163,12 +111,7 @@ var parser = (function() {
         tree = buildTree(parts);
         tree = buildStructure(tree);
         tree = cleanTree(tree);
-        tree = buildObjects(tree);
-        tree = functionBodies(tree);
-        return {
-            type: 'obj',
-            children: assignVars(tree)
-        };
+        return tree;
     }
 
     return {
