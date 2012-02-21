@@ -121,7 +121,7 @@ var lett = (function() {
     function build(code) {
         var tree = parser.parse(code);
         tree = functionBody(tree, {});
-        console.log('tree', tree);
+        console.log('Result', tree);
         return tree;
     }
 
