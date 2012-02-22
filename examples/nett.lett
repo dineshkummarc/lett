@@ -1,5 +1,0 @@
-client require('net')
-
-client.connect(80 'google.com' (
-  console.log('OUS!')
-))
