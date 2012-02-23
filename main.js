@@ -1,12 +1,3 @@
-/*
-if (!console) console = {};
-var $result, hack = console.log;
-console.log = function() {
-    hack.apply(console, arguments);
-    $result.text($result.text() + arguments[0]);
-};
-*/
-
 $(function() {
     var $examples = $('#examples'),
     $code = $('ol');
