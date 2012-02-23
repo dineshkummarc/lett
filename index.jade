@@ -1,0 +1,37 @@
+!!! 5
+head
+  title MAGICAT 
+  meta(charset='utf-8')
+  link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css')
+  link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css')
+  link(rel='stylesheet', href='main.css')
+  script(src='http://code.jquery.com/jquery.min.js')
+  script(src='http://documentcloud.github.com/underscore/underscore-min.js')
+  script(src='https://raw.github.com/eirikb/lett/master/lett.min.js')
+  script(src='main.js')
+body
+  a(href='http://github.com/eirikb/lett')
+    img.forkme(src='http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png', alt='Fork me on GitHub')
+  .container
+    .row
+      .span2
+        ul#examples.nav.nav-list
+          for example in examples
+            li
+              a(href='/lett/examples/' +example) #{example}
+      .span4
+        pre.prettyprint.linenums
+          ol.linenums(contenteditable=true)
+      .span1
+        button#parse.btn.btn-primary PARSE
+          i.icon-arrow-right.icon-white
+      #result.span4.well
+  script
+    var _gaq=_gaq || [];
+    _gaq.push(['_setAccount','UA-29447067-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
