@@ -43,7 +43,7 @@ $(function() {
 
         $result.text('');
 
-        b = lett.build(code);
+        b = lett(code);
 
         $result.text($result.text() + b);
     });

@@ -4,20 +4,21 @@ head
   meta(charset='utf-8')
   link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css')
   link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css')
+  link(rel='stylesheet', href='main.css')
   script(src='http://code.jquery.com/jquery.min.js')
-  script(src='https://raw.github.com/eirikb/lett/master/corelib.js')
-  script(src='https://raw.github.com/eirikb/lett/master/parser.js')
-  script(src='https://raw.github.com/eirikb/lett/master/lett.js')
+  script(src='http://documentcloud.github.com/underscore/underscore-min.js')
+  script(src='https://raw.github.com/eirikb/lett/master/lett.min.js')
   script(src='main.js')
-  style ol { outline: none; } ol.linenums li {color: black; } .container { margin-top: 20px; }
 body
+  a(href='http://github.com/eirikb/lett')
+    img.forkme(src='http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png', alt='Fork me on GitHub')
   .container
     .row
       .span2
         ul#examples.nav.nav-list
           for example in examples
             li
-              a(href='/lett/examples/' +example) #{example}
+              a(href='/lett/p/examples/' +example) #{example}
       .span4
         pre.prettyprint.linenums
           ol.linenums(contenteditable=true)

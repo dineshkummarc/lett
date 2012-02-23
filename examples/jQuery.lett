@@ -1,1 +1,1 @@
-$('#result').text('Haha no wai')
+$.get('/lett' (data console.log(data)))

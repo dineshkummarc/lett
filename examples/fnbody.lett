@@ -1,3 +1,5 @@
-(a b c (
+test (a b c (
   console.log(a b c)
   +(a b c)))
+
+test(1 2 3)

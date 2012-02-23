@@ -1,0 +1,9 @@
+// Underscore is INTEGRATED
+// when found, that is :/
+
+test array(1 2 3)
+
+array(
+  last(test)
+  first(test)
+)
